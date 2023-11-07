@@ -1,4 +1,3 @@
- 
 import json
 import os.path
 import random
@@ -63,10 +62,8 @@ class AntiUwUBot:
         async def gamble_coin(room, message):
             match = botlib.MessageMatch(room, message, self.bot, self.PREFIX)
             if match.is_not_from_this_bot() and match.prefix() and (match.command("gamble") or match.command("bet")):
-
                 win_rate = 55  # Percent
                 user_name = str(message.sender)
-
                 # Enforce positive integers
                 try:
                     if match.args()[0] == '*':
@@ -103,7 +100,6 @@ class AntiUwUBot:
                 try:
                     results = []
                     sorted_entries = collections.OrderedDict(sorted(self.stat_dict.items(), key=lambda t: t[1]['coins'], reverse=True))
-
                     for name, val_dict in sorted_entries.items():
                         coins = val_dict['coins']
                         results.append([name, coins])
@@ -130,10 +126,10 @@ class AntiUwUBot:
         async def give(room, message):
             match = botlib.MessageMatch(room, message, self.bot, self.PREFIX)
             if match.is_not_from_this_bot() and match.prefix() and (match.command("give")):
-                user_name = str(message.sender)
-                recipient = match.args()[0]
-                donation = match.args()[1]
                 try:
+                    user_name = str(message.sender)
+                    recipient = match.args()[0]
+                    donation = match.args()[1]
                     if donation == '*':
                         amount = self.get_coin_balance(user=user_name)
                     else:
@@ -176,34 +172,27 @@ class AntiUwUBot:
     ''' ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^'''
     def get_coin_balance(self, user):
         self.check_user_exists(user)
-
         try:
             return self.stat_dict[user]['coins']
         except:
             return 0
-
         self.write_to_file()
 
     def add_coin(self, user, coins):
         self.check_user_exists(user)
-
         self.stat_dict[user]['coins'] += coins  # Check to make sure they have enough
-
         self.write_to_file()
 
     def remove_coin(self, user, coins):
         self.check_user_exists(user)
-
         if self.stat_dict[user]['coins'] - coins < 0:
             self.stat_dict[user]['coins'] = 0
         else:
             self.stat_dict[user]['coins'] -= coins
-
         self.write_to_file()
 
     def eligible_for_daily(self, user):
         self.check_user_exists(user)
-
         seconds_elapsed = (datetime.now() - datetime.strptime(str(self.stat_dict[user]['last_daily']),
                                                               '%m/%d/%Y, %H:%M:%S')).total_seconds()
         print(f"SECONDS: {seconds_elapsed}")
