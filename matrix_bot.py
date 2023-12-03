@@ -225,5 +225,6 @@ class AntiUwUBot:
             json.dump(self.stat_dict, json_file)
 
 
-uwu_inst = AntiUwUBot()
-uwu_inst.bot.run()
+if __name__ == "__main__":
+    uwu_inst = AntiUwUBot()
+    uwu_inst.bot.run()
